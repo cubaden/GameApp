@@ -1,25 +1,41 @@
-from time import clock_getres
-import pygame, sys
+import pygame, sys, random
 from pygame.locals import *
 
 pygame.init()
 pygame.display.set_caption("First Program")
 
-screen = pygame.display.set_mode((640,480))
+screen = pygame.display.set_mode((1000,600))
 
-xpos = 50
 clock = pygame.time.Clock()
+
+raindrop_spawn_time = 0
+
+class Raindrop:
+    def __init__(self):
+        self.x = random.randint(0, 1000)
+        self.y = -5
+
+    def move(self):
+        self.y += 7
+
+    def draw(self):
+        pygame.draw.line(screen, (0,0,0), (self.x, self.y), (self.x, self.y+5), 1)
+
+raindrops = []
 
 while 1:
     clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[K_RIGHT]:        
-            xpos += 1
-        if pressed_keys[K_LEFT]:        
-            xpos -= 1
+        raindrops.append(Raindrop())
+        #pressed_keys = pygame.key.get_pressed()
+        #if pressed_keys[K_RIGHT]:        
+        #    xpos += 1
+        #if pressed_keys[K_LEFT]:        
+        #    xpos -= 1
         screen.fill((255,255,255))
-        pygame.draw.circle(screen, (0,255,0), (xpos,200),20)
+        for raindrop in raindrops:
+            raindrop.move()
+            raindrop.draw()
         pygame.display.update()
