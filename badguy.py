@@ -12,16 +12,24 @@ class Badguy:
     def __init__(self):
         self.x = random.randint(0, 570)
         self.y = -45
+        self.dx = 3
+        self.dy = 0
 
     def move(self):
-        self.y += 5
-        if self.y > 150 and self.y < 250:
-            self.x += 5
-        if self.y > 250:
-            self.x -= 5
+        self.x += self.dx
+        self.y += self.dy
+        if self.x < 0 or self.x > 570:
+            self.dx *= -1
+
+    def bounce(self):
+        if self.x < 0 or self.x > 570:
+            self.dx *= -1
 
     def draw(self):
         screen.blit(badguy_image, (self.x, self.y))
+
+    def off_screen(self):
+        return self.y > 640
 
 badguy = Badguy()
 
@@ -34,7 +42,11 @@ while 1:
     screen.fill((0,0,0))
 
     badguy.move()
+    badguy.bounce()
     badguy.draw()
+
+    if badguy.off_screen():
+        badguy = Badguy()
 
     pygame.display.update()
 
